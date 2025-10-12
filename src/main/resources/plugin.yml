@@ -1,0 +1,15 @@
+name: CurrencyPlugin
+version: ${project.version}
+main: com.currencyplugin.CurrencyPlugin
+api-version: 1.20
+authors: [CurrencyPlugin]
+description: Flexible multi-currency plugin with custom commands and placeholders
+softdepend: [PlaceholderAPI]
+
+permissions:
+  currency.*:
+    description: Доступ ко всем командам валют
+    default: true
+  currency.admin:
+    description: Административные команды валют
+    default: op

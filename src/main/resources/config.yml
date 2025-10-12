@@ -1,0 +1,105 @@
+# ============================================
+# CurrencyPlugin - Конфигурация
+# ============================================
+# Поддержка цветов: &c (стандартные), #FF5555 (HEX), <rgb(255,85,85)> (RGB)
+# ============================================
+
+# Настройки базы данных
+storage:
+  type: YAML  # YAML или SQLite
+
+# Конфигурация валют
+# Можно добавлять бесконечное количество валют
+currencies:
+  
+  # Пример валюты 1: Монеты
+  coins:
+    # Отображаемое название валюты (поддерживает HEX и RGB цвета)
+    display-name: "#FFD700Монеты"
+    
+    # Название команды для этой валюты
+    command: "coins"
+    
+    # Placeholder для PlaceholderAPI: %currency_coins%
+    placeholder: "coins"
+    
+    # Стартовый баланс для новых игроков
+    starting-balance: 100.0
+    
+    # Разрешения для команд
+    permissions:
+      view: "currency.coins.view"      # Просмотр баланса
+      give: "currency.coins.give"      # Выдача валюты (админ)
+      take: "currency.coins.take"      # Изъятие валюты (админ)
+      pay: "currency.coins.pay"        # Передача другим игрокам
+      set: "currency.coins.set"        # Установка баланса (админ)
+    
+    # Сообщения для этой валюты
+    messages:
+      balance: "#FFD700Ваш баланс: #FFFFFF{amount} #FFD700монет"
+      balance-other: "#FFD700Баланс игрока #FFFFFF{player}#FFD700: #FFFFFF{amount} #FFD700монет"
+      give-success: "#00FF00Вы выдали #FFFFFF{amount} #FFD700монет #FFFFFF{player}"
+      give-received: "#00FF00Вы получили #FFFFFF{amount} #FFD700монет"
+      take-success: "#FF5555Вы забрали #FFFFFF{amount} #FFD700монет #FFFFFFу {player}"
+      take-removed: "#FF5555У вас забрали #FFFFFF{amount} #FFD700монет"
+      pay-success: "#00FF00Вы передали #FFFFFF{amount} #FFD700монет #FFFFFF{player}"
+      pay-received: "#00FF00Вы получили #FFFFFF{amount} #FFD700монет #FFFFFFот {player}"
+      set-success: "#00FF00Баланс игрока #FFFFFF{player} #00FF00установлен на #FFFFFF{amount} #FFD700монет"
+      insufficient-funds: "#FF5555Недостаточно средств! У вас: #FFFFFF{balance} #FFD700монет"
+      invalid-amount: "#FF5555Неверная сумма!"
+      player-not-found: "#FF5555Игрок не найден!"
+      no-permission: "#FF5555У вас нет прав на эту команду!"
+  
+  # Пример валюты 2: Кристаллы
+  crystals:
+    display-name: "<rgb(85,255,255)>Кристаллы"
+    command: "crystals"
+    placeholder: "crystals"
+    starting-balance: 0.0
+    permissions:
+      view: "currency.crystals.view"
+      give: "currency.crystals.give"
+      take: "currency.crystals.take"
+      pay: "currency.crystals.pay"
+      set: "currency.crystals.set"
+    messages:
+      balance: "<rgb(85,255,255)>Ваш баланс: #FFFFFF{amount} <rgb(85,255,255)>кристаллов"
+      balance-other: "<rgb(85,255,255)>Баланс игрока #FFFFFF{player}<rgb(85,255,255)>: #FFFFFF{amount} <rgb(85,255,255)>кристаллов"
+      give-success: "#00FF00Вы выдали #FFFFFF{amount} <rgb(85,255,255)>кристаллов #FFFFFF{player}"
+      give-received: "#00FF00Вы получили #FFFFFF{amount} <rgb(85,255,255)>кристаллов"
+      take-success: "#FF5555Вы забрали #FFFFFF{amount} <rgb(85,255,255)>кристаллов #FFFFFFу {player}"
+      take-removed: "#FF5555У вас забрали #FFFFFF{amount} <rgb(85,255,255)>кристаллов"
+      pay-success: "#00FF00Вы передали #FFFFFF{amount} <rgb(85,255,255)>кристаллов #FFFFFF{player}"
+      pay-received: "#00FF00Вы получили #FFFFFF{amount} <rgb(85,255,255)>кристаллов #FFFFFFот {player}"
+      set-success: "#00FF00Баланс игрока #FFFFFF{player} #00FF00установлен на #FFFFFF{amount} <rgb(85,255,255)>кристаллов"
+      insufficient-funds: "#FF5555Недостаточно средств! У вас: #FFFFFF{balance} <rgb(85,255,255)>кристаллов"
+      invalid-amount: "#FF5555Неверная сумма!"
+      player-not-found: "#FF5555Игрок не найден!"
+      no-permission: "#FF5555У вас нет прав на эту команду!"
+  
+  # Пример валюты 3: Рубины
+  rubies:
+    display-name: "&c&lРубины"
+    command: "rubies"
+    placeholder: "rubies"
+    starting-balance: 50.0
+    permissions:
+      view: "currency.rubies.view"
+      give: "currency.rubies.give"
+      take: "currency.rubies.take"
+      pay: "currency.rubies.pay"
+      set: "currency.rubies.set"
+    messages:
+      balance: "&c&lВаш баланс: &f{amount} &c&lрубинов"
+      balance-other: "&c&lБаланс игрока &f{player}&c&l: &f{amount} &c&lрубинов"
+      give-success: "&aВы выдали &f{amount} &c&lрубинов &f{player}"
+      give-received: "&aВы получили &f{amount} &c&lрубинов"
+      take-success: "&cВы забрали &f{amount} &c&lрубинов &fу {player}"
+      take-removed: "&cУ вас забрали &f{amount} &c&lрубинов"
+      pay-success: "&aВы передали &f{amount} &c&lрубинов &f{player}"
+      pay-received: "&aВы получили &f{amount} &c&lрубинов &fот {player}"
+      set-success: "&aБаланс игрока &f{player} &aустановлен на &f{amount} &c&lрубинов"
+      insufficient-funds: "&cНедостаточно средств! У вас: &f{balance} &c&lрубинов"
+      invalid-amount: "&cНеверная сумма!"
+      player-not-found: "&cИгрок не найден!"
+      no-permission: "&cУ вас нет прав на эту команду!"
