@@ -1,8 +1,8 @@
-name: CurrencyPlugin
+name: Currency
 version: ${project.version}
 main: com.currencyplugin.CurrencyPlugin
 api-version: 1.21
-authors: [CurrencyPlugin]
+authors: [animesao]
 description: Flexible multi-currency plugin with custom commands and placeholders
 softdepend: [PlaceholderAPI]
 
