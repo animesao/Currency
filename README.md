@@ -165,7 +165,8 @@ diamonds:
 Плагин поддерживаеться до 2026 года
 
 ---
-
+ ([Wiki](https://alfheimguide.ct.ws/wiki_article?slug=currencyplugin))
+ 
 **Версия:** 1.0.0  
 **Minecraft:** 1.16+  
 **Java:** 17+
