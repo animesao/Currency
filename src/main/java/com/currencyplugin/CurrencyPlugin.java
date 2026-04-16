@@ -35,7 +35,7 @@ public class CurrencyPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         if (dataManager != null) {
-            dataManager.saveAll();
+            dataManager.close();
         }
         getLogger().info("CurrencyPlugin disabled!");
     }

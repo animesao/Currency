@@ -2,7 +2,6 @@ package com.currencyplugin.managers;
 
 import com.currencyplugin.CurrencyPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +12,19 @@ import java.util.UUID;
 public class DataManager {
     
     private final CurrencyPlugin plugin;
+    private final DatabaseManager databaseManager;
     private final File dataFolder;
     private final Map<UUID, Map<String, Double>> balances;
     
     public DataManager(CurrencyPlugin plugin) {
         this.plugin = plugin;
-        this.dataFolder = new File(plugin.getDataFolder(), "playerdata");
+        this.databaseManager = new DatabaseManager(plugin);
+        this.dataFolder = new File(plugin.getDataFolder(), 
+            plugin.getConfig().getString("storage.yaml.folder", "playerdata"));
         this.balances = new HashMap<>();
+        
+        // Инициализация базы данных
+        databaseManager.initialize();
         
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
@@ -27,15 +32,34 @@ public class DataManager {
     }
     
     public double getBalance(UUID playerId, String currencyId) {
-        loadPlayerData(playerId);
-        return balances.getOrDefault(playerId, new HashMap<>())
-                      .getOrDefault(currencyId, getStartingBalance(currencyId));
+        DatabaseManager.StorageType type = databaseManager.getStorageType();
+        
+        if (type == DatabaseManager.StorageType.YAML) {
+            loadPlayerData(playerId);
+            return balances.getOrDefault(playerId, new HashMap<>())
+                          .getOrDefault(currencyId, getStartingBalance(currencyId));
+        } else {
+            // Для SQL баз данных - синхронное получение
+            try {
+                return databaseManager.getBalance(playerId, currencyId).get();
+            } catch (Exception e) {
+                plugin.getLogger().severe("Ошибка получения баланса: " + e.getMessage());
+                return getStartingBalance(currencyId);
+            }
+        }
     }
     
     public void setBalance(UUID playerId, String currencyId, double amount) {
-        loadPlayerData(playerId);
-        balances.computeIfAbsent(playerId, k -> new HashMap<>()).put(currencyId, amount);
-        savePlayerData(playerId);
+        DatabaseManager.StorageType type = databaseManager.getStorageType();
+        
+        if (type == DatabaseManager.StorageType.YAML) {
+            loadPlayerData(playerId);
+            balances.computeIfAbsent(playerId, k -> new HashMap<>()).put(currencyId, amount);
+            savePlayerData(playerId);
+        } else {
+            // Для SQL баз данных - асинхронное сохранение
+            databaseManager.setBalance(playerId, currencyId, amount);
+        }
     }
     
     public void addBalance(UUID playerId, String currencyId, double amount) {
@@ -95,13 +119,32 @@ public class DataManager {
     }
     
     public void saveAll() {
-        for (UUID playerId : balances.keySet()) {
-            savePlayerData(playerId);
+        DatabaseManager.StorageType type = databaseManager.getStorageType();
+        
+        if (type == DatabaseManager.StorageType.YAML) {
+            for (UUID playerId : balances.keySet()) {
+                savePlayerData(playerId);
+            }
         }
+        // Для SQL баз данных сохранение происходит автоматически
     }
     
     public void unloadPlayer(UUID playerId) {
-        savePlayerData(playerId);
-        balances.remove(playerId);
+        DatabaseManager.StorageType type = databaseManager.getStorageType();
+        
+        if (type == DatabaseManager.StorageType.YAML) {
+            savePlayerData(playerId);
+            balances.remove(playerId);
+        }
+        // Для SQL баз данных выгрузка не требуется
+    }
+    
+    public void close() {
+        saveAll();
+        databaseManager.close();
+    }
+    
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 }

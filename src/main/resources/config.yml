@@ -6,7 +6,54 @@
 
 # Настройки базы данных
 storage:
-  type: SQLite  # YAML или SQLite
+  # Тип хранилища: YAML, SQLite, MySQL
+  type: SQLite
+  
+  # Настройки MySQL (используется только если type: MySQL)
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "minecraft"
+    username: "root"
+    password: "password"
+    # Дополнительные параметры подключения
+    properties:
+      useSSL: false
+      autoReconnect: true
+      characterEncoding: "utf8"
+      maxReconnects: 3
+    # Настройки пула соединений
+    pool:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # Настройки SQLite (используется только если type: SQLite)
+  sqlite:
+    # Имя файла базы данных
+    filename: "currency.db"
+    # Путь к файлу (относительно папки плагина)
+    path: "data/"
+  
+  # Настройки YAML (используется только если type: YAML)
+  yaml:
+    # Папка для хранения данных игроков
+    folder: "playerdata/"
+    # Автосохранение (в минутах)
+    auto-save-interval: 5
+  
+  # Общие настройки
+  backup:
+    # Автоматическое резервное копирование
+    enabled: true
+    # Интервал в часах
+    interval: 24
+    # Количество хранимых копий
+    keep: 7
+    # Папка для бэкапов
+    folder: "backups/"
 
 # Конфигурация валют
 # Можно добавлять бесконечное количество валют
